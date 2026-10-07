@@ -1,0 +1,11 @@
+grid 120x120 t=200 wind=90deg k=1.5  seq=3c589f191ddaa373  p1:OK p2:OK p3:OK p4:OK p5:OK p7:OK p8:OK 
+grid 200x103 t=300 wind=225deg k=2.0  seq=ccde8ac05661efb1  p1:OK p2:OK p3:OK p4:OK p5:OK p7:OK p8:OK 
+grid 150x157 t=250 wind=0deg k=0.0  seq=06ac005736273495  p1:OK p2:OK p3:OK p4:OK p5:OK p7:OK p8:OK 
+grid 97x211 t=400 wind=135deg k=3.0  seq=b6c4dd369a33ef8b  p1:OK p2:OK p3:OK p4:OK p5:OK p7:OK p8:OK 
+
+Byte-level comparison of final grids (cmp):
+  p=2 identical
+  p=3 identical
+  p=5 identical
+
+ALL 28 CHECKS PASSED: parallel output == sequential output
