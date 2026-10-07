@@ -58,7 +58,7 @@ def cmd_progress(out="out", name="seq_stats.csv"):
 
 
 def cmd_bench(path="results/bench.csv"):
-    rows = list(csv.DictReader(open(path)))
+    rows = list(csv.DictReader(open(path, encoding="utf-8")))
     runs = defaultdict(list)            # (size, impl, procs) -> [(time, comm)]
     hashes = defaultdict(set)           # size -> set(hash)
     for r in rows:
@@ -83,7 +83,7 @@ def cmd_bench(path="results/bench.csv"):
     for n, p, ts, tp, s, e, c in tab:
         print(f"{n:>6} {p:>5} {ts:>10.3f} {tp:>10.3f} {s:>8.2f} {e:>7.2f} {c:>6.1f}")
     os.makedirs("results", exist_ok=True)
-    with open("results/summary.csv", "w") as f:
+    with open("results/summary.csv", "w", encoding="utf-8") as f:
         f.write("grid,procs,t_seq,t_par,speedup,efficiency,comm_percent\n")
         for row in tab: f.write(",".join(f"{x:.4f}" if isinstance(x, float) else str(x) for x in row) + "\n")
 

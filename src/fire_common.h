@@ -22,6 +22,15 @@
 #include <string.h>
 #include <math.h>
 
+/* portable "create directory" (Linux/macOS: mkdir with mode, Windows: _mkdir) */
+#ifdef _WIN32
+  #include <direct.h>
+  #define MAKE_DIR(p) _mkdir(p)
+#else
+  #include <sys/stat.h>
+  #define MAKE_DIR(p) mkdir((p), 0755)
+#endif
+
 #define UNBURNED 0
 #define BURNING  1
 #define BURNT    2

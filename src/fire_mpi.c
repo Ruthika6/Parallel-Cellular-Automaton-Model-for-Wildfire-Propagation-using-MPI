@@ -10,7 +10,6 @@
  * does NOT have to be divisible by the number of processes.
  */
 #include <mpi.h>
-#include <sys/stat.h>
 #include "fire_common.h"
 
 /* Gather the current strips of all ranks into `full` on rank 0 (H*W bytes). */
@@ -80,7 +79,7 @@ int main(int argc, char **argv)
     FILE *stats = NULL;
     char path[512];
     if (rank == 0 && P.write_output) {
-        mkdir(P.outdir, 0755);
+        MAKE_DIR(P.outdir);
         snprintf(path, sizeof path, "%s/mpi_p%d_stats.csv", P.outdir, size);
         stats = fopen(path, "w");
         fprintf(stats, "step,unburned,burning,burnt\n");

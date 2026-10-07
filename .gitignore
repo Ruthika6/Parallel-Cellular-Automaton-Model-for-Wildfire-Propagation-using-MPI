@@ -1,0 +1,7 @@
+fire_seq
+fire_seq.exe
+fire_mpi
+fire_mpi.exe
+out/
+out_test/
+__pycache__/

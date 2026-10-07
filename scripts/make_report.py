@@ -36,7 +36,7 @@ AUTHORS = [("K Sri Praneetha", "245805006"), ("K Ruthika Reddy", "245805344")]
 def read_env():
     env = {}
     if os.path.exists("results/env.txt"):
-        for line in open("results/env.txt"):
+        for line in open("results/env.txt", encoding="utf-8"):
             if "=" in line:
                 k, v = line.rstrip("\n").split("=", 1); env[k] = v
     return env
@@ -44,7 +44,7 @@ def read_env():
 def read_summary():
     rows = []
     if os.path.exists("results/summary.csv"):
-        for r in csv.DictReader(open("results/summary.csv")):
+        for r in csv.DictReader(open("results/summary.csv", encoding="utf-8")):
             rows.append(dict(grid=int(r["grid"]), procs=int(r["procs"]), t_seq=float(r["t_seq"]),
                              t_par=float(r["t_par"]), speedup=float(r["speedup"]),
                              eff=float(r["efficiency"]), comm=float(r["comm_percent"])))
@@ -53,7 +53,7 @@ def read_summary():
 def read_bench_meta():
     steps = None; hashes_ok = None
     if os.path.exists("results/bench.csv"):
-        rows = list(csv.DictReader(open("results/bench.csv")))
+        rows = list(csv.DictReader(open("results/bench.csv", encoding="utf-8")))
         if rows:
             steps = rows[0]["steps"]
             by = {}
@@ -67,7 +67,7 @@ STEPS, HASH_OK = read_bench_meta()
 CORES = int(ENV.get("cores", "0") or 0)
 
 def source_snippet(path, start_pat, end_pat):
-    txt = open(path).read().split("\n")
+    txt = open(path, encoding="utf-8", errors="replace").read().split("\n")
     out, on = [], False
     for ln in txt:
         if start_pat in ln: on = True
@@ -413,7 +413,7 @@ P("Correctness is checked in three ways.", align="justify")
 N(" every run prints a 64-bit FNV-1a hash of the final grid; the hash printed by the MPI program must equal the hash printed by the sequential program.", "Hash comparison —")
 N(" the full final grid written by the sequential and the MPI program is compared with the cmp command.", "Byte-level comparison —")
 N(" tests use several process counts (1, 2, 3, 4, 5, 7, 8), several wind directions and strengths, and grid heights such as 103, 131, 157, 211 that are not divisible by most process counts.", "Awkward configurations —")
-log = open("results/test_log.txt").read().strip().split("\n")[-1] if os.path.exists("results/test_log.txt") else None
+log = open("results/test_log.txt", encoding="utf-8", errors="replace").read().strip().split("\n")[-1] if os.path.exists("results/test_log.txt") else None
 if log:
     CALLOUT(f"Result of 'make test':  {log}", fill="E6F4EA", color="1B5E20")
 else:

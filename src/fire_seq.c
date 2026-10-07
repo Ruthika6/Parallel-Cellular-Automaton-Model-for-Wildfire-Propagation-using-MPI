@@ -2,17 +2,29 @@
  * fire_seq.c -- SEQUENTIAL wildfire cellular automaton (baseline).
  * One process updates the whole grid every timestep.
  */
+#ifndef _WIN32
 #define _POSIX_C_SOURCE 199309L
+#endif
 #include <time.h>
-#include <sys/stat.h>
 #include "fire_common.h"
 
+#ifdef _WIN32
+#include <windows.h>
+static double now(void)             /* high-resolution timer on Windows */
+{
+    LARGE_INTEGER f, c;
+    QueryPerformanceFrequency(&f);
+    QueryPerformanceCounter(&c);
+    return (double)c.QuadPart / (double)f.QuadPart;
+}
+#else
 static double now(void)
 {
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return ts.tv_sec + ts.tv_nsec * 1e-9;
 }
+#endif
 
 static void snapshot(const FireParams *P, const uint8_t *real, const uint8_t *fuel, int t, FILE *stats)
 {
@@ -44,7 +56,7 @@ int main(int argc, char **argv)
 
     FILE *stats = NULL;
     if (P.write_output) {
-        mkdir(P.outdir, 0755);
+        MAKE_DIR(P.outdir);
         char path[512];
         snprintf(path, sizeof path, "%s/seq_stats.csv", P.outdir);
         stats = fopen(path, "w");

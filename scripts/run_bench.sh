@@ -19,7 +19,7 @@ echo "impl,procs,W,H,steps,repeat,time,comm,hash" > $OUT
 {
   echo "cores=$NCORES"
   echo "cpu=$(grep -m1 'model name' /proc/cpuinfo 2>/dev/null | cut -d: -f2- | sed 's/^ *//')"
-  echo "mpi=$(mpirun --version 2>&1 | head -1)"
+  echo "mpi=$($MPIRUN --version 2>&1 | head -1)"
   echo "os=$(uname -sr)"
   echo "date=$(date +%F)"
 } > results/env.txt
