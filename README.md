@@ -95,16 +95,3 @@ See also **WINDOWS.md** for building natively on Windows without WSL.
 * Fire cannot jump a firebreak wider than a cell (no "spotting"/embers), and there is no terrain slope, humidity or fuel moisture.
 * MPI is not the only tool for a single machine (OpenMP would also work); MPI is chosen because it scales to distributed-memory clusters and because the project is about message passing.
 
-## 7. Likely viva questions
-
-| Question | Answer |
-|---|---|
-| Why is MPI really needed here? | Fire at a strip edge depends on neighbouring rows owned by another process, so data must be exchanged every timestep (halo exchange), not only once. |
-| Why `MPI_Sendrecv`? | Combines send and receive in one deadlock-free call; with plain blocking `MPI_Send` followed by `MPI_Recv` on every rank, the exchange can deadlock. |
-| Why `MPI_PROC_NULL`? | Edge ranks have only one neighbour; sending to/receiving from `MPI_PROC_NULL` is a no-op, which removes special cases. The untouched halo stays zero = "unburned". |
-| What if the rows don't divide evenly? | `Scatterv/Gatherv` with per-rank counts and displacements; tested with 103, 131, 157, 203, 211 rows. |
-| How do you know the parallel version is correct? | Hash-based RNG + identical update function → outputs are bit-identical; `make test` checks 28 combinations and `cmp`s the files. |
-| Why is speedup < p? | Halo-exchange cost every step, memory bandwidth limits, rank 0's extra work outside the loop, and OS jitter. |
-| Why does bigger grid give better efficiency? | Compute grows as W·H, communication only as W. |
-| Why row-wise and not 2-D blocks? | Rows are contiguous in memory, so no packing is needed; simpler and adequate here. |
-| Why not `rand()`? | A shared stream makes the result depend on process count/order, so parallel ≠ sequential and correctness cannot be shown. |
